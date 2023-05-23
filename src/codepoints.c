@@ -1,8 +1,7 @@
 #include "include/codepoints.h"
 #include <string.h>
-#include <stdio.h>
 #include <stdlib.h>
-static int *CodepointRemoveDuplicates(int *codepoints, int codepointCount, int *codepointsResultCount)
+int *CodepointRemoveDuplicates(int *codepoints, int codepointCount, int *codepointsResultCount)
 {
     int codepointsNoDupsCount = codepointCount;
     int *codepointsNoDups = (int *)calloc(codepointCount, sizeof(int));
