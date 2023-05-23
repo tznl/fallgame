@@ -1,12 +1,10 @@
 #include "raylib.h"
+#include "include/define.h"
 #include "include/scenemanager.h"
 #include <stdio.h>
 
 GameScreen current_scene = TITLE;
 bool init_loaded = false;
-extern int screen_width;
-extern int screen_height;
-extern int fps_cap;
 
 int main()
 {
@@ -25,6 +23,8 @@ int main()
 			init_loaded = true;
 		}
 		scene_draw();
+
+		DrawFPS(10, 10);
 
 		EndDrawing();
 //		if (IsKeyPressed(KEY_Q == true)){

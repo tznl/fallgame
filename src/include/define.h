@@ -1,9 +1,10 @@
-#pragma once
+#ifndef DEFINE_H
+#define DEFINE_H
 #include "raylib.h"
 
-int screen_width  = 854;
-int screen_height = 480;
-int fps_cap      = 60; 
+extern int screen_width;
+extern int screen_height;
+extern int fps_cap;
 
 struct resource
 {
@@ -12,3 +13,4 @@ struct resource
 	Texture2D tex;
 	Image image;
 };
+#endif
