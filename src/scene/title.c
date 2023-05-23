@@ -29,8 +29,6 @@ void scene_load_title()
 
 	SetTextureFilter(title.noto.texture, TEXTURE_FILTER_BILINEAR);
 	free(codepointsNoDups);
-
-	scene_load_world();
 }
 
 void scene_draw_title()

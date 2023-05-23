@@ -29,9 +29,6 @@ void scene_draw(void)
 
 void scene_start(void)
 {
-	switch (current_scene) {
-		case TITLE: scene_load_title(); break;
-//              case TEST: scene_load_test(); break;
-		default: break;
-        }
+	scene_load_world();
+	scene_load_title();
 }
