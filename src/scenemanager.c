@@ -20,6 +20,7 @@ void scene_new(GameScreen scene)
 }
 void scene_draw(void)
 {
+	scene_draw_world();
 	switch (current_scene) {
 		case TITLE: scene_draw_title(); break;
 //		case TEST: scene_draw_test(); break;

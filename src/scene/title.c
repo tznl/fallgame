@@ -20,7 +20,7 @@ void scene_load_title()
 	                &codepointsNoDupsCount);
 
 	UnloadCodepoints(codepoints);
-	
+	title.tex  = LoadTexture("resource/title.png");	
 	title.noto = LoadFontEx(
                 "resource/font/noto/NotoSerifSC-Regular.otf", 
                 20, 
@@ -33,13 +33,27 @@ void scene_load_title()
 
 void scene_draw_title()
 {
-	scene_draw_world();
+	float font_scale = 0.25;
 
-	DrawTextEx(
+        DrawTexturePro(
+                title.tex,
+                (Rectangle){0, 0, title.tex.width, title.tex.height},
+                (Rectangle){
+                        screen_width/2,
+                        screen_height/4,
+                        (title.tex.width*font_scale),
+                        (title.tex.height*font_scale)},
+                (Vector2){(
+			title.tex.width*font_scale)/2, 
+			title.tex.height*font_scale/2}, 
+                0,
+                WHITE);
+
+/*	DrawTextEx(
 		title.noto, 
 		titlename, 
-		(Vector2){(screen_width/2) - 20, (screen_height/2) - 20},
+		(Vector2){(screen_width/2), (screen_height/4)},
 		48, 
 		5, 
-		BLACK);
+		BLACK);*/
 }

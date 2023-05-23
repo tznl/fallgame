@@ -23,7 +23,7 @@ void scene_draw_world()
 {
         int tunnel_spacing = 150;
         int tunnel_height = 0;
-        float tunnel_scale = 4;
+        float tunnel_scale = 0.25;
 
         ClearBackground(RAYWHITE);
  
@@ -35,9 +35,9 @@ void scene_draw_world()
                 (Rectangle){
                         -tunnel_spacing,
                         tunnel_height,
-                        (world.tex.width/tunnel_scale),
-                        (world.tex.height/tunnel_scale)},
-                (Vector2){world.tex.width/tunnel_scale, 0},
+                        (world.tex.width*tunnel_scale),
+                        (world.tex.height*tunnel_scale)},
+                (Vector2){world.tex.width*tunnel_scale, 0},
                 0,
                 WHITE);
         //tunnel 2 (right)
@@ -47,8 +47,8 @@ void scene_draw_world()
                 (Rectangle){
                         tunnel_spacing,
                         tunnel_height,
-                        (world.tex.width/tunnel_scale),
-                        (world.tex.height/tunnel_scale)},
+                        (world.tex.width*tunnel_scale),
+                        (world.tex.height*tunnel_scale)},
                 (Vector2){0, 0},
                 0,
                 WHITE);
