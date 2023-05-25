@@ -1,7 +1,8 @@
 #pragma once
 #include "raylib.h"
-typedef enum GameScreen { UNKNOWN = -1, START = 0, TITLE, TEST } GameScreen;
+enum GameScreen { UNKNOWN = -1, START = 0, TITLE, TEST };
+extern enum GameScreen current_scene;
 
-void scene_new(GameScreen scene);
+void scene_new(enum GameScreen scene);
 void scene_draw(void);
 void scene_start(void);

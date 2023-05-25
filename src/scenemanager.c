@@ -2,9 +2,7 @@
 #include "include/scenemanager.h"
 #include "include/scene.h"
 
-extern GameScreen current_scene;
-
-void scene_new(GameScreen scene)
+void scene_new(enum GameScreen scene)
 {
 //	switch (current_scene) {
 //		case TITLE: scene_unload_title(); break;

@@ -11,18 +11,22 @@ int offset		= 0;
 int tunnel_spacing	= 150;
 int tunnel_height 	= 0;
 int count 		= 0; // test variable delete later
+int real_tunnel_height;
 
 float tunnel_scale 	= 0.25;
-
-int real_tunnel_height;
 float unit_max;
+
+bool started            = false;
+
 
 void scene_load_world()
 {
+//	float bs = GetScreenToWorld2D((Vector2){screen_width, screen_height}, world.cam).y;
+	float bs = 0;
         world.tex = LoadTexture("resource/dirt_flat.png");
 
         world.cam = (Camera2D){0};
-        world.cam.target = (Vector2){ 0.0f, 0.0f };
+        world.cam.target = (Vector2){ 0.0f, bs };
         world.cam.offset = (Vector2){ screen_width/2.0f, screen_height/2.0f };
         world.cam.rotation = 0.0f;
         world.cam.zoom = 1.0f;
@@ -31,26 +35,52 @@ void scene_load_world()
 	unit_max		= 
 		(float)(GetScreenToWorld2D(
         	(Vector2){screen_width, screen_height}, world.cam).y); 
+
+
 }
 
 void scene_draw_world()
 {
         ClearBackground(RAYWHITE);
 
-	BeginMode2D(world.cam);
-	for (int i = tunnel_height; i <= unit_max; i += real_tunnel_height) {
-		draw_tunnel_unit(i);
+	if (IsKeyPressed(KEY_SPACE)) {
+		started = true;
 	}
-	printf("out of for loop: %d\n", count);
+
+	BeginMode2D(world.cam);
+	if (!started) unstarted();
+	if (started) move_to_start();
+	if (started) tunnel_height--;
+	printf("out of for loop: %d\n\n", count);
 	count++;
         EndMode2D();
 
-	tunnel_height--;
 }
 
-void draw_tunnel_unit(int offset)
+void move_to_start()
 {
-	printf("test: %d\n", offset);
+	world.cam.target = (Vector2){ 0.0f, screen_height/4 };
+
+        for (float i = tunnel_height; i <= unit_max; i += real_tunnel_height) {
+                draw_tunnel_unit(i);
+		printf("for: i: %f\n", i);
+        }
+}
+
+void unstarted()
+{
+        for (float i = tunnel_height; i <= unit_max; i += real_tunnel_height) {
+                draw_tunnel_unit(i);
+        }
+}
+
+void draw_tunnel_unit(float offset)
+{
+        unit_max                =
+                (float)(GetScreenToWorld2D(
+                (Vector2){screen_width, screen_height}, world.cam).y); 
+
+
         DrawTexturePro(
                 world.tex,
                 (Rectangle){0, 0, world.tex.width, world.tex.height},

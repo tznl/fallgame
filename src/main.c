@@ -3,7 +3,7 @@
 #include "include/scenemanager.h"
 #include <stdio.h>
 
-GameScreen current_scene = TITLE;
+//GameScreen current_scene = TITLE;
 bool init_loaded = false;
 
 int main()
