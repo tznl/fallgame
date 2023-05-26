@@ -10,6 +10,7 @@ void scene_draw_world();
 void draw_tunnel_unit(float offset);
 void move_to_start();
 void unstarted();
+void recursive_draw();
 
 //void scene_unload_test();
 //void scene_load_test();
