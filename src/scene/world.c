@@ -15,6 +15,7 @@ int real_tunnel_height;
 
 float tunnel_scale 	= 0.25;
 float unit_max;
+float unit_min;
 
 bool started            = false;
 bool starting		= true;
@@ -30,11 +31,6 @@ void scene_load_world()
         world.cam.zoom = 1.0f;
 
 	real_tunnel_height = world.tex.height*tunnel_scale;
-	unit_max		= 
-		(float)(GetScreenToWorld2D(
-        	(Vector2){screen_width, screen_height}, world.cam).y); 
-
-
 }
 
 void scene_draw_world()
@@ -58,6 +54,8 @@ void recursive_draw()
 {
         unit_max =      (float)(GetScreenToWorld2D(
                         (Vector2){screen_width, screen_height}, world.cam).y);
+        unit_min =      (float)(GetScreenToWorld2D(
+                        (Vector2){0, 0}, world.cam).y);
 
         if (started && starting) {
                 world.cam.target = (Vector2){ 0.0f, screen_height/4 };
@@ -74,6 +72,7 @@ void recursive_draw()
 
 void draw_tunnel_unit(float offset)
 {
+	//tunnel 1 (left)
         DrawTexturePro(
                 world.tex,
                 (Rectangle){0, 0, world.tex.width, world.tex.height},
