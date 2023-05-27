@@ -1,15 +1,17 @@
 #include "raylib.h"
+#include "../include/scenemanager.h"
 #include "../include/scene.h"
 #include "../include/define.h"
 #include "../include/codepoints.h"
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 struct resource title;
 
 char *titlename = "fallgame";
 
-void scene_load_title()
+void screen_load_title()
 {
 	int codepointCount = 0;
 	int *codepoints = LoadCodepoints(titlename, &codepointCount);
@@ -31,8 +33,12 @@ void scene_load_title()
 	free(codepointsNoDups);
 }
 
-void scene_draw_title()
+void screen_draw_title()
 {
+        if (IsKeyPressed(KEY_SPACE)) {
+                current_scene = NONE;
+        }
+
 	float font_scale = 0.25;
 
         DrawTexturePro(
