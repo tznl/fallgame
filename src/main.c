@@ -18,12 +18,12 @@ int main()
 		BeginDrawing();
 
 		if (!init_loaded) {
-			scene_start();
+			resource_start();
 			printf("First scene loaded\n");
 			init_loaded = true;
 		}
-		scene_draw();
-
+		screen_draw();
+		world_draw();
 		DrawFPS(10, 10);
 
 		EndDrawing();

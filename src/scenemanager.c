@@ -16,17 +16,17 @@ void scene_new(enum GameScreen scene)
 //	}
 //	current_scene = scene;
 }
-void scene_draw(void)
+
+void world_draw(void)
 {
 	scene_draw_world();
-	switch (current_scene) {
-		case TITLE: scene_draw_title(); break;
-//		case TEST: scene_draw_test(); break;
-		default: break;
-	}
+}
+void screen_draw(void)
+{
+	scene_draw_title();
 }
 
-void scene_start(void)
+void resource_start(void)
 {
 	scene_load_world();
 	scene_load_title();

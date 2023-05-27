@@ -65,7 +65,7 @@ void recursive_draw()
 		world.cam.target = (Vector2){ 0, speed+world.cam.target.y };
 	}
 
-        for (float i = tunnel_height; i <= unit_max; i += real_tunnel_height) {
+        for (float i = tunnel_height + floor(unit_min/real_tunnel_height); i <= unit_max; i += real_tunnel_height) {
                 draw_tunnel_unit(i);
         }
 }
