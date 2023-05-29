@@ -67,11 +67,19 @@ void world_transition()
 
 void world_play()
 {
-	if (IsKeyDown(KEY_LEFT)) {
+/*	switch (GetKeyPressed()) {
+		case KEY_A: charmain.x-=charmain.move; break;
+		case KEY_D: charmain.x+=charmain.move; break;
+		default: break;
+	}
+*/
+	charmain.x = GetScreenToWorld2D(GetMousePosition(), world.cam).x;
+/*	if (IsKeyDown(KEY_A) || IsKeyDown(KEY_LEFT)) {
 		charmain.x-=charmain.move;
-	}else if (IsKeyDown(KEY_RIGHT)) {
+	}else if (IsKeyDown(KEY_D) || IsKeyDown(KEY_RIGHT)) {
 		charmain.x+=charmain.move;
 	}
+*/
 	charmain.y = (int)floor(GetScreenToWorld2D((Vector2){
 		screen_width, screen_height/4}, world.cam).y);
 	draw_character_fall(charmain.x, charmain.y);
