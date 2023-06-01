@@ -25,9 +25,10 @@ void world_draw(void)
 	ClearBackground(RAYWHITE);
 
 	switch (current_worldstate) {
-		case STATIC: world_static(); break;
-		case TRANSITION: world_transition(); break;
-		case PLAY: world_play();  break;
+		case W_STATIC: world_static(); break;
+		case W_TRANSITION: world_transition(); break;
+		case W_PLAY: world_play();  break;
+		case W_DEATH: world_death();
 		default: break;
 	}
 
@@ -37,8 +38,10 @@ void world_draw(void)
 void screen_draw(void)
 {
 	switch (current_scene) {
-		case TITLE: screen_draw_title(); break;
-		case NONE: break;
+		case S_TITLE: screen_draw_title(); break;
+		case S_TITLELOAD: screen_load_font();  break;
+		case S_PLAY: screen_draw_play(); break; 
+		case S_NONE: break;
 		default: break;
 	}
 }

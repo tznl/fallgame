@@ -18,7 +18,11 @@ int tunnel_height       = 0;
 int speed               = 10; 
 int real_tunnel_height;
 
-float character_scale	= 0.19;
+Vector2 hitbox_character;
+Rectangle hitbox_tunnel_left;
+Rectangle hitbox_tunnel_right;
+
+float character_scale	= 0.1;
 float tunnel_scale      = 0.25;
 float unit_max;
 float unit_min;
@@ -42,14 +46,13 @@ void world_load()
 		world.cam).y);
 	charmain.x = 0;
 	charmain.move = 10;
-	real_tunnel_height = world.tex.height*tunnel_scale;
-	
+	real_tunnel_height = world.tex.height*tunnel_scale;	
 }
 
 void world_static()
 {
-        if (IsKeyPressed(KEY_SPACE)) {
-                current_worldstate = TRANSITION;
+        if (IsMouseButtonPressed(0)) {
+                current_worldstate = W_TRANSITION;
         }
 	recursive_draw();
 	draw_character_fall(0, 0);
@@ -62,32 +65,44 @@ void world_transition()
 	printf("starting tripped\n");
 	recursive_draw();
 	draw_character_fall(0, 0);
-	current_worldstate = PLAY;
+	current_worldstate = W_PLAY;
 }
 
 void world_play()
 {
-/*	switch (GetKeyPressed()) {
-		case KEY_A: charmain.x-=charmain.move; break;
-		case KEY_D: charmain.x+=charmain.move; break;
-		default: break;
-	}
-*/
 	charmain.x = GetScreenToWorld2D(GetMousePosition(), world.cam).x;
-/*	if (IsKeyDown(KEY_A) || IsKeyDown(KEY_LEFT)) {
-		charmain.x-=charmain.move;
-	}else if (IsKeyDown(KEY_D) || IsKeyDown(KEY_RIGHT)) {
-		charmain.x+=charmain.move;
-	}
-*/
 	charmain.y = (int)floor(GetScreenToWorld2D((Vector2){
 		screen_width, screen_height/4}, world.cam).y);
+
 	draw_character_fall(charmain.x, charmain.y);
 	recursive_draw();
+
+        hitbox_character = (Vector2) {charmain.x, charmain.y};
+        hitbox_tunnel_left = (Rectangle){
+                        -tunnel_spacing-(world.tex.width*tunnel_scale),
+                        floor(unit_min),
+                        (world.tex.width*tunnel_scale),
+                        (world.tex.height*tunnel_scale)};
+
+        hitbox_tunnel_right = (Rectangle){
+                        tunnel_spacing,
+                        floor(unit_min),
+                        (world.tex.width*tunnel_scale),
+                        (world.tex.height*tunnel_scale)};
+
+	if (CheckCollisionPointRec(hitbox_character, hitbox_tunnel_left) ||
+	CheckCollisionPointRec(hitbox_character, hitbox_tunnel_left)) {
+		current_worldstate = W_DEATH;
+	}
 	world.cam.target = (Vector2){ 0, speed+world.cam.target.y };
-//	printf("charmain.y: %d\ntarget: %f\n", charmain.y, world.cam.target.y);
+
 }
 
+void world_death() 
+{
+	draw_character_fall(charmain.x, charmain.y);
+        recursive_draw();
+}
 void recursive_draw() 
 {
         unit_max =      (float)(GetScreenToWorld2D(
@@ -101,6 +116,7 @@ void recursive_draw()
 
                 draw_tunnel_unit(i);
         }
+
 }
 
 void draw_character_fall(int x, int y)
@@ -133,6 +149,7 @@ void draw_tunnel_unit(float offset)
                 (Vector2){world.tex.width*tunnel_scale, 0}, 
                 0,
                 WHITE);
+
         //tunnel 2 (right)
         DrawTexturePro(
                 world.tex,
@@ -145,4 +162,5 @@ void draw_tunnel_unit(float offset)
                 (Vector2){0, 0}, 
                 0,
                 WHITE);
+
 }

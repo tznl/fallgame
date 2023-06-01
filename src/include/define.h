@@ -3,10 +3,14 @@
 #include "raylib.h"
 
 //world data. move to a seperate file later
-enum worldstate { STATIC = 0, PLAY, TRANSITION};
+enum worldstate { W_STATIC = 0, W_PLAY, W_DEATH, W_TRANSITION};
 
 extern struct resource world;
 extern enum worldstate current_worldstate;
+
+extern Vector2 hitbox_character;
+extern Rectangle hitbox_tunnel_left;
+extern Rectangle hitbox_tunnel_right;
 
 //universal data
 extern int screen_width;
