@@ -13,7 +13,7 @@ void world_static();
 void world_transition();
 void world_death();
 void world_play();
-void draw_obstacle_unit(float offset);
+void draw_obstacle_unit(Rectangle draw_where);
 void draw_tunnel_unit(float offset);
 void draw_character_fall();
 //void move_to_start();

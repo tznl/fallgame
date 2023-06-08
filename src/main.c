@@ -3,7 +3,6 @@
 #include "include/scenemanager.h"
 #include <stdio.h>
 
-//GameScreen current_scene = TITLE;
 bool init_loaded = false;
 
 int main()
@@ -27,13 +26,8 @@ int main()
 		DrawFPS(10, 10);
 
 		EndDrawing();
-//		if (IsKeyPressed(KEY_Q == true)){
-//		}
 	}
 
-//        UnloadTexture(tex);
-//        UnloadModel(model);
-//	UnloadFont(noto);
         CloseWindow();
 
 	return 0;

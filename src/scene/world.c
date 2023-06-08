@@ -24,6 +24,7 @@ Rectangle hitbox_tunnel_right;
 
 float character_scale	= 0.15;
 float tunnel_scale      = 0.25;
+float obstacle_scale	= 0.05;
 float unit_max;
 float unit_min;
 
@@ -136,7 +137,16 @@ void recursive_draw()
                         i <= unit_max;
                         i += real_tunnel_height) {
 
-                draw_obstacle_unit(i);
+                Rectangle obstaclepos = (Rectangle){
+                        20,
+                        0 + i,
+                        (world.obstacletex.width*obstacle_scale),
+                        (world.obstacletex.height*obstacle_scale)};
+
+                draw_obstacle_unit(obstaclepos);
+	        if (CheckCollisionPointRec(hitbox_character, obstaclepos)) {
+	                current_worldstate = W_DEATH;
+	        }
         }
 
 }
@@ -157,17 +167,13 @@ void draw_character_fall(int x, int y)
 		WHITE);
 }
 
-void draw_obstacle_unit(float offset)
+void draw_obstacle_unit(Rectangle draw_where)
 {
         DrawTexturePro(
                 world.obstacletex,
                 (Rectangle){0, 0, world.obstacletex.width, world.obstacletex.height},
-                (Rectangle){
-                        0,
-                        0 + offset,
-                        (world.obstacletex.width*0.01),
-                        (world.obstacletex.height*0.01)},
-                (Vector2){world.obstacletex.width*0.01, 0}, 
+                draw_where,
+                (Vector2){0, 0}, 
                 0,
                 WHITE);
 
