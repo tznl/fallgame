@@ -74,7 +74,7 @@ void screen_draw_title()
 void screen_draw_play()
 {
 	char posarray[64];
-	sprintf(posarray, "%d", (int)hitbox_character.y);
+	sprintf(posarray, "%d", (int)hitbox_character.y/100);
 
 	DrawTextEx(
 		title.noto, 

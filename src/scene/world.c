@@ -22,7 +22,7 @@ Vector2 hitbox_character;
 Rectangle hitbox_tunnel_left;
 Rectangle hitbox_tunnel_right;
 
-float character_scale	= 0.1;
+float character_scale	= 0.15;
 float tunnel_scale      = 0.25;
 float unit_max;
 float unit_min;
@@ -38,6 +38,8 @@ void world_load()
         world.cam.offset = (Vector2){ screen_width/2.0f, screen_height/2.0f };
         world.cam.rotation = 0.0f;
         world.cam.zoom = 1.0f;
+
+	world.obstacletex = LoadTexture("resource/obstacle.png");
 
 	world.character = LoadTexture("resource/bury_fall.png");
 
@@ -55,7 +57,19 @@ void world_static()
                 current_worldstate = W_TRANSITION;
         }
 	recursive_draw();
-	draw_character_fall(0, 0);
+
+        DrawTexturePro(
+                world.character,
+                (Rectangle){0, 0, world.character.width, world.character.height},
+                (Rectangle){
+                        0,
+                        0,
+                        world.character.width*character_scale,
+                        world.character.height*character_scale},
+                (Vector2)       {(world.character.width*character_scale)/2,
+                                world.character.height*character_scale},
+                0,
+                WHITE);
 }
 
 void world_transition()
@@ -90,8 +104,8 @@ void world_play()
                         (world.tex.width*tunnel_scale),
                         (world.tex.height*tunnel_scale)};
 
-	if (CheckCollisionPointRec(hitbox_character, hitbox_tunnel_left) ||
-	CheckCollisionPointRec(hitbox_character, hitbox_tunnel_left)) {
+	if (	CheckCollisionPointRec(hitbox_character, hitbox_tunnel_left) ||
+		CheckCollisionPointRec(hitbox_character, hitbox_tunnel_right)) {
 		current_worldstate = W_DEATH;
 	}
 	world.cam.target = (Vector2){ 0, speed+world.cam.target.y };
@@ -110,11 +124,19 @@ void recursive_draw()
         unit_min =      (float)(GetScreenToWorld2D(
                         (Vector2){0, 0}, world.cam).y);
 
-        for (float      i = tunnel_height + floor(unit_min/real_tunnel_height);
+        for (float      i  = floor(unit_min/real_tunnel_height);
                         i <= unit_max;
                         i += real_tunnel_height) {
 
                 draw_tunnel_unit(i);
+        }
+//temp obstacle code
+
+        for (float      i  = floor(unit_min/real_tunnel_height);
+                        i <= unit_max;
+                        i += real_tunnel_height) {
+
+                draw_obstacle_unit(i);
         }
 
 }
@@ -135,6 +157,21 @@ void draw_character_fall(int x, int y)
 		WHITE);
 }
 
+void draw_obstacle_unit(float offset)
+{
+        DrawTexturePro(
+                world.obstacletex,
+                (Rectangle){0, 0, world.obstacletex.width, world.obstacletex.height},
+                (Rectangle){
+                        0,
+                        0 + offset,
+                        (world.obstacletex.width*0.01),
+                        (world.obstacletex.height*0.01)},
+                (Vector2){world.obstacletex.width*0.01, 0}, 
+                0,
+                WHITE);
+
+}
 void draw_tunnel_unit(float offset)
 {
 	//tunnel 1 (left)

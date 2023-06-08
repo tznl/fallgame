@@ -19,6 +19,7 @@ extern int fps_cap;
 
 struct resource
 {
+	Texture2D obstacletex;
 	Texture2D character;
         Camera2D cam;
         Font noto;
