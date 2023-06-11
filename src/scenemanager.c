@@ -25,6 +25,7 @@ void world_draw(void)
 	ClearBackground(RAYWHITE);
 
 	switch (current_worldstate) {
+		case W_STARTING: world_starting(); break;
 		case W_STATIC: world_static(); break;
 		case W_TRANSITION: world_transition(); break;
 		case W_PLAY: world_play();  break;

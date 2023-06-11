@@ -3,7 +3,7 @@
 #include "raylib.h"
 
 //world data. move to a seperate file later
-enum worldstate { W_STATIC = 0, W_PLAY, W_DEATH, W_TRANSITION};
+enum worldstate { W_STATIC = 0, W_STARTING, W_PLAY, W_DEATH, W_TRANSITION};
 
 extern struct resource world;
 extern enum worldstate current_worldstate;
