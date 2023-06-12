@@ -29,7 +29,7 @@ void world_draw(void)
 		case W_STATIC: world_static(); break;
 		case W_TRANSITION: world_transition(); break;
 		case W_PLAY: world_play();  break;
-		case W_DEATH: world_death();
+		case W_DEATH: world_death(); break;
 		default: break;
 	}
 
@@ -43,6 +43,7 @@ void screen_draw(void)
 		case S_TITLELOAD: screen_load_font();  break;
 		case S_PLAY: screen_draw_play(); break; 
 		case S_NONE: break;
+		case S_DEATH: screen_draw_death(); break;
 		default: break;
 	}
 }

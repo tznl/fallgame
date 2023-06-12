@@ -71,16 +71,81 @@ void screen_draw_title()
                 WHITE);
 }
 
+
 void screen_draw_play()
 {
-	char posarray[64];
-	sprintf(posarray, "%d", (int)hitbox_character.y/100);
+        char posarray[64];
+        sprintf(posarray, "%d", (int)hitbox_character.y/100);
 
-	DrawTextEx(
-		title.noto, 
-		posarray, 
-		(Vector2){(screen_width/2), (10)},
-		48, 
-		5, 
-		BLACK);
+        char speedarray[64];
+        sprintf(speedarray, "%d", (int)speed);
+
+        int pos_size = MeasureTextEx(
+                title.noto,
+                posarray,
+                48,
+                5).x;
+
+        DrawTextEx(
+                title.noto,
+                posarray,
+                (Vector2){(screen_width/2) - (pos_size/2), (screen_height/50)},
+                48,
+                5,
+                BLACK);
+
+        int speed_size = MeasureTextEx(
+                title.noto,
+                speedarray,
+                48,
+                5).x;
+
+        DrawTextEx(
+                title.noto,
+                speedarray,
+                (Vector2){(screen_width/12) - (speed_size/2), (screen_height/50)},
+                48,
+                5,
+                BLACK);
+}
+
+void screen_draw_death()
+{
+        char posarray[64];
+        sprintf(posarray, "%d", (int)hitbox_character.y/100);
+
+	int pos_size = MeasureTextEx(
+		title.noto,
+		posarray,
+		48,
+		5).x;
+
+        DrawTextEx(
+                title.noto, 
+                posarray, 
+                (Vector2){(screen_width/2) - (pos_size/2), (screen_height/50)},
+                48,
+                5,
+                BLACK);
+
+	char* restart_array = "tap again to restart";
+
+        int restart_size = MeasureTextEx(
+                title.noto,
+                restart_array,
+                48,
+                5).x;
+
+        DrawTextEx(
+                title.noto,
+                restart_array,
+                (Vector2){(screen_width/2) - (restart_size/2), (screen_height/2)},
+                48,
+                5,
+                BLACK);
+
+        if (IsMouseButtonPressed(0)) {
+                screen_load_font();
+                current_scene = S_TITLELOAD;
+        }
 }

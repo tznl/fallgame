@@ -8,6 +8,7 @@ enum worldstate { W_STATIC = 0, W_STARTING, W_PLAY, W_DEATH, W_TRANSITION};
 extern struct resource world;
 extern enum worldstate current_worldstate;
 
+extern float speed;
 extern Vector2 hitbox_character;
 extern Rectangle hitbox_tunnel_left;
 extern Rectangle hitbox_tunnel_right;

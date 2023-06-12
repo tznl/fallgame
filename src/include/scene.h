@@ -6,6 +6,7 @@ void scene_unload_title();
 void screen_load_title();
 void screen_draw_title();
 void screen_draw_play();
+void screen_draw_death();
 
 //void scene_unload_world();
 void world_load();
