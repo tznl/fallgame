@@ -53,7 +53,7 @@ void world_load()
 
 	speed = 10;
 	acceleration = 0.01;
-	terminal_velocity = 15;
+	terminal_velocity = 25;
 
 	charmain.move = 10;
 	real_tunnel_height = world.tex.height*tunnel_scale;	
