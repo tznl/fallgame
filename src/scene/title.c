@@ -10,8 +10,6 @@
 
 struct resource title;
 
-//char *codepoint_text;
-
 void screen_load_font()
 {
 /*        int codepointCount = 0;

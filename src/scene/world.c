@@ -20,7 +20,7 @@ int tunnel_spacing      = 150;
 int tunnel_height       = 0;
 int real_tunnel_height;
 int seed		= 0; 
-int starting_height	= 10*100; //real world position is shown divided by 100 in game
+int starting_height	= 10*100; /*real world position is shown divided by 100 in game*/
 
 Vector2 hitbox_character;
 Rectangle hitbox_tunnel_left;
@@ -52,7 +52,7 @@ void world_load()
 	world.character = LoadTexture("resource/bury_fall.png");
 
 	speed = 10;
-	acceleration = 0.01;
+	acceleration = 0.005;
 	terminal_velocity = 25;
 
 	charmain.move = 10;
@@ -141,7 +141,8 @@ void world_starting()
         unit_min =      (float)(GetScreenToWorld2D(
                         (Vector2){0, 0}, world.cam).y);
 
-        for (float      i  = floor(unit_min/real_tunnel_height);
+	float i;
+        for (i  = floor(unit_min/real_tunnel_height);
                         i <= unit_max;
                         i += real_tunnel_height) {
 
@@ -184,24 +185,25 @@ void world_death()
 
 void recursive_draw() 
 {
+	float i;
         unit_max =      (float)(GetScreenToWorld2D(
                         (Vector2){screen_width, screen_height}, world.cam).y);
         unit_min =      (float)(GetScreenToWorld2D(
                         (Vector2){0, 0}, world.cam).y);
 
-        for (float      i  = floor(unit_min/real_tunnel_height);
-                        i <= unit_max;
-                        i += real_tunnel_height) {
+        for (i  = floor(unit_min/real_tunnel_height);
+	i <= unit_max;
+	i += real_tunnel_height) {
 
                 draw_tunnel_unit(i);
         }
-//temp obstacle code
+/*temp obstacle code*/
 
 	int tmp = 1;
 
-        for (float      i  = floor(unit_min/real_tunnel_height);
-                        i <= unit_max;
-                        i += real_tunnel_height) {
+        for (i  = floor(unit_min/real_tunnel_height);
+	i <= unit_max;
+	i += real_tunnel_height) {
 		if (i < starting_height) {
 
 		continue;
@@ -225,9 +227,9 @@ void recursive_draw()
 int obstacle_randomizer(int* x)
 {
 	int value;
-	value = (abs(*x+=seed)) %//random
-	(int)(tunnel_spacing*2-(world.obstacletex.width*obstacle_scale)); //limit
-	value -= tunnel_spacing;
+	value = (abs(*x+=seed)) % /*random*/
+	(int)(tunnel_spacing*2-(world.obstacletex.width*obstacle_scale)); /*limit*/
+	value -= tunnel_spacing; /*centering the obstacle position*/
 	return value;
 }
 
@@ -260,7 +262,7 @@ void draw_obstacle_unit(Rectangle draw_where)
 }
 void draw_tunnel_unit(float offset)
 {
-	//tunnel 1 (left)
+	/*tunnel 1 (left)*/
         DrawTexturePro(
                 world.tex,
                 (Rectangle){0, 0, world.tex.width, world.tex.height},
@@ -273,7 +275,7 @@ void draw_tunnel_unit(float offset)
                 0,
                 WHITE);
 
-        //tunnel 2 (right)
+        /*tunnel 2 (right)*/
         DrawTexturePro(
                 world.tex,
                 (Rectangle){0, 0, -world.tex.width, world.tex.height},
