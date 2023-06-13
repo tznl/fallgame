@@ -17,7 +17,7 @@ void world_play();
 void world_starting();
 void draw_obstacle_unit(Rectangle draw_where);
 void draw_tunnel_unit(float offset);
-void draw_character_fall();
+void draw_character_fall(int x, int y);
 int obstacle_randomizer(int* x);
 //void move_to_start();
 //void unstarted();

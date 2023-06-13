@@ -176,6 +176,7 @@ void world_death()
 {
 	draw_character_fall(charmain.x, charmain.y);
         recursive_draw();
+	speed = 10;
         if (IsMouseButtonPressed(0)) {
                 current_worldstate = W_TRANSITION;
         }

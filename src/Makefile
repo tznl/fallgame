@@ -1,4 +1,4 @@
-CC = gcc
+CC = clang
 
 SRC = codepoints.c main.c scenemanager.c define.c 
 SRC += scene/title.c scene/world.c
