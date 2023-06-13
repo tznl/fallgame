@@ -26,6 +26,7 @@ Vector2 hitbox_character;
 Rectangle hitbox_tunnel_left;
 Rectangle hitbox_tunnel_right;
 
+float collision_radius = 1;
 float speed;
 float acceleration;
 float terminal_velocity;
@@ -200,6 +201,7 @@ void recursive_draw()
 /*temp obstacle code*/
 
 	int tmp = 1;
+	i = 0;
 
         for (i  = floor(unit_min/real_tunnel_height);
 	i <= unit_max;
@@ -211,12 +213,13 @@ void recursive_draw()
 
                 Rectangle obstaclepos = (Rectangle){
                         obstacle_randomizer(&tmp),
-                        0 + i,
+                        i,
                         (world.obstacletex.width*obstacle_scale),
                         (world.obstacletex.height*obstacle_scale)};
 
                 draw_obstacle_unit(obstaclepos);
-	        if (CheckCollisionPointRec(hitbox_character, obstaclepos)) {
+		DrawCircleV(hitbox_character, collision_radius, RED);
+	        if (CheckCollisionCircleRec(hitbox_character, collision_radius,  obstaclepos)) {
 	                current_worldstate = W_DEATH;
 			current_scene = S_DEATH;
 	        }
