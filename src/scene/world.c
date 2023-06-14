@@ -117,8 +117,8 @@ void world_play()
                         (world.tex.width*tunnel_scale),
                         (world.tex.height*tunnel_scale)};
 
-	if (	CheckCollisionPointRec(hitbox_character, hitbox_tunnel_left) ||
-		CheckCollisionPointRec(hitbox_character, hitbox_tunnel_right)) {
+	if (	CheckCollisionCircleRec(hitbox_character, collision_radius, hitbox_tunnel_left) ||
+		CheckCollisionCircleRec(hitbox_character, collision_radius, hitbox_tunnel_right)) {
 		current_worldstate = W_DEATH;
 		current_scene = S_DEATH;
 	}
@@ -201,14 +201,13 @@ void recursive_draw()
 /*temp obstacle code*/
 
 	int tmp = 1;
-	i = 0;
 
         for (i  = floor(unit_min/real_tunnel_height);
 	i <= unit_max;
 	i += real_tunnel_height) {
 		if (i < starting_height) {
 
-		continue;
+			continue;
 		}
 
                 Rectangle obstaclepos = (Rectangle){
