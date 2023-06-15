@@ -47,7 +47,10 @@ void screen_load_title()
 
 void screen_draw_title()
 {
-        if (IsMouseButtonPressed(0)) {
+	extern int tunnel_spacing;
+        if (IsMouseButtonPressed(0) &&
+        !(GetScreenToWorld2D(GetMousePosition(), world.cam).x <= -tunnel_spacing) &&
+        !(GetScreenToWorld2D(GetMousePosition(), world.cam).x  >= tunnel_spacing)) {
                 screen_load_font();
 		current_scene = S_TITLELOAD;
         }

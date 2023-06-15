@@ -23,7 +23,6 @@ int main()
 		}
 		world_draw();
 		screen_draw();
-		DrawFPS(10, 10);
 
 		EndDrawing();
 	}

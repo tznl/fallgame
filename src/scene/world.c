@@ -67,7 +67,9 @@ void world_load()
 
 void world_static()
 {
-        if (IsMouseButtonPressed(0)) {
+        if (IsMouseButtonPressed(0) &&
+	!(GetScreenToWorld2D(GetMousePosition(), world.cam).x <= -tunnel_spacing) &&
+	!(GetScreenToWorld2D(GetMousePosition(), world.cam).x  >= tunnel_spacing)) {
                 current_worldstate = W_TRANSITION;
         }
 
@@ -179,7 +181,9 @@ void world_death()
 	draw_character_fall(charmain.x, charmain.y);
         recursive_draw();
 	speed = 10;
-        if (IsMouseButtonPressed(0)) {
+        if (IsMouseButtonPressed(0) &&
+        !(GetScreenToWorld2D(GetMousePosition(), world.cam).x <= -tunnel_spacing) &&
+        !(GetScreenToWorld2D(GetMousePosition(), world.cam).x  >= tunnel_spacing)) {
                 current_worldstate = W_TRANSITION;
         }
 }
