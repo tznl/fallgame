@@ -1,2 +1,6 @@
+android/
 ignore/
+include/
+lib/
 raylib/
+
