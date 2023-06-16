@@ -7,6 +7,11 @@ bool init_loaded = false;
 
 int main()
 {
+#ifndef PLATFORM_ANDROID
+	ChangeDirectory("../assets");
+#endif
+
+
 	printf("test\n");
 
 	InitWindow(screen_width, screen_height, "fallgame");

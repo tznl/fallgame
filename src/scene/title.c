@@ -31,7 +31,7 @@ void screen_load_font()
 	free(codepointsNoDups);
 */
         title.noto = LoadFontEx(
-                "resource/font/noto/NotoSerifSC-Regular.otf",
+                "font/noto/NotoSerifSC-Regular.otf",
                 50,
                 NULL,
                 0);
@@ -41,7 +41,7 @@ void screen_load_font()
 
 void screen_load_title()
 {
-	title.tex  = LoadTexture("resource/title.png");	
+	title.tex  = LoadTexture("title.png");	
 	SetTextureFilter(title.noto.texture, TEXTURE_FILTER_BILINEAR);
 }
 

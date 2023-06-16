@@ -41,16 +41,16 @@ bool starting           = true;
 
 void world_load()
 {
-        world.tex = LoadTexture("resource/dirt_flat.png");
+        world.tex = LoadTexture("dirt_flat.png");
         world.cam = (Camera2D){0};
         world.cam.target = (Vector2){ 0, 0 };
         world.cam.offset = (Vector2){ screen_width/2.0f, screen_height/2.0f };
         world.cam.rotation = 0.0f;
         world.cam.zoom = 1.0f;
 
-	world.obstacletex = LoadTexture("resource/obstacle.png");
+	world.obstacletex = LoadTexture("obstacle.png");
 
-	world.character = LoadTexture("resource/bury_fall.png");
+	world.character = LoadTexture("bury_fall.png");
 
 	speed = 10;
 	acceleration = 0.005;
