@@ -3,4 +3,5 @@ ignore/
 include/
 lib/
 raylib/
-
+build_android.sh
+*.apk
