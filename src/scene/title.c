@@ -49,14 +49,14 @@ void screen_load_title()
 void screen_draw_title()
 {
 	extern int tunnel_spacing;
+        float font_scale = 0.25;
+
         if (IsMouseButtonPressed(0) &&
         !(GetScreenToWorld2D(GetMousePosition(), world.cam).x <= -tunnel_spacing) &&
         !(GetScreenToWorld2D(GetMousePosition(), world.cam).x  >= tunnel_spacing)) {
                 screen_load_font();
 		current_scene = S_TITLELOAD;
         }
-
-	float font_scale = 0.25;
 
         DrawTexturePro(
                 title.tex,
@@ -88,6 +88,12 @@ void screen_draw_play()
                 48,
                 5).x;
 
+        int speed_size = MeasureTextEx(
+                title.noto,
+                speedarray,
+                48,
+                5).x;
+
         DrawTextEx(
                 title.noto,
                 posarray,
@@ -95,12 +101,6 @@ void screen_draw_play()
                 48,
                 5,
                 BLACK);
-
-        int speed_size = MeasureTextEx(
-                title.noto,
-                speedarray,
-                48,
-                5).x;
 
         DrawTextEx(
                 title.noto,
@@ -113,8 +113,25 @@ void screen_draw_play()
 
 void screen_draw_death()
 {
+        char* restart_array = "tap again to restart";
+
         char posarray[64];
         sprintf(posarray, "%d", (int)hitbox_character.y/100);
+
+        char speedarray[64];
+        sprintf(speedarray, "%d", (int)speed);
+
+        int speed_size = MeasureTextEx(
+                title.noto,
+                speedarray,
+                48,
+                5).x;
+
+        int restart_size = MeasureTextEx(
+                title.noto,
+                restart_array,
+                48,
+                5).x;
 
 	int pos_size = MeasureTextEx(
 		title.noto,
@@ -130,13 +147,13 @@ void screen_draw_death()
                 5,
                 BLACK);
 
-	char* restart_array = "tap again to restart";
-
-        int restart_size = MeasureTextEx(
+        DrawTextEx(
                 title.noto,
-                restart_array,
+                speedarray,
+                (Vector2){(screen_width/12) - (speed_size/2), (screen_height/50)},
                 48,
-                5).x;
+                5,
+                BLACK);
 
         DrawTextEx(
                 title.noto,
