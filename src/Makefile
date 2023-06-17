@@ -7,4 +7,4 @@ LIBDIRS = -L/usr/X11R6/lib/ -L/usr/local/lib/
 INCDIRS = -I/usr/local/include/ -I/usr/X11R6/include/
 
 make:
-	$(CC) $(SRC) -o ../fallgame/run $(LIBDIRS) $(INCDIRS) $(CFLAGS) 
+	$(CC) $(SRC) -o ../run $(LIBDIRS) $(INCDIRS) $(CFLAGS) 

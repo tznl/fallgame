@@ -8,7 +8,7 @@ bool init_loaded = false;
 int main()
 {
 #ifndef PLATFORM_ANDROID
-	ChangeDirectory("../assets");
+	ChangeDirectory("./assets");
 #endif
 
 
