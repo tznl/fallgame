@@ -49,27 +49,25 @@ void world_load()
         world.cam.target = (Vector2){ 0, 0 };
         world.cam.offset = (Vector2){ screen_width/2.0f, screen_height/2.0f };
         world.cam.rotation = 0.0f;
-	float tmp = ((float)screen_height / 427.0f) / 2.0f;
-        world.cam.zoom = tmp;
-
+        world.cam.zoom = ((float)screen_height / 427.0f) / 2.0f;
 	world.obstacletex = LoadTexture("obstacle.png");
-
 	world.character = LoadTexture("bury_fall.png");
-
 	outer_world_tex = LoadTexture("dirt_outer.png");
 
 
 	speed = 10;
+
 	acceleration = 0.005;
+
 	terminal_velocity = 25;
 
 	charmain.move = 10;
+
 	real_tunnel_height = world.tex.height*tunnel_scale;	
 	real_tunnel_width = world.tex.width*tunnel_scale;
 
 	srand(time(NULL));
 	seed = rand();
-	puts("world loaded");
 
 }
 
@@ -101,7 +99,6 @@ void world_transition()
 {
 	world.cam.target = (Vector2){ 0.0f, screen_height/4 };
 	starting = false;
-	printf("starting tripped\n");
 	current_worldstate = W_PLAY;
 }
 
@@ -141,24 +138,25 @@ void world_play()
 
 void world_starting()
 {
+	float i;
+
         charmain.x = GetScreenToWorld2D(GetMousePosition(), world.cam).x;
+
         charmain.y = (int)floor(GetScreenToWorld2D((Vector2){
                 screen_width, screen_height/4}, world.cam).y);
+
         hitbox_character = (Vector2) {charmain.x, charmain.y};
-        draw_character_fall(charmain.x, charmain.y);
+
+	speed = 10;
 
         unit_max =      GetScreenToWorld2D(
                         (Vector2){screen_width, screen_height}, world.cam);
         unit_min =      GetScreenToWorld2D(
                         (Vector2){0, 0}, world.cam);
 
-	float i;
-        for (i  = floor(unit_min.y/real_tunnel_height);
-                        i <= unit_max.y;
-                        i += real_tunnel_height) {
+	world.cam.target = (Vector2){ 0, speed+world.cam.target.y };
 
-                draw_tunnel_unit(0, i, world.tex);
-        }
+	draw_character_fall(charmain.x, charmain.y);
 
         hitbox_tunnel_left = (Rectangle){
                         -tunnel_spacing-(world.tex.width*tunnel_scale),
@@ -172,11 +170,17 @@ void world_starting()
                         (world.tex.width*tunnel_scale),
                         (world.tex.height*tunnel_scale)};
 
+        for (i  = floor(unit_min.y/real_tunnel_height);
+                        i <= unit_max.y;
+                        i += real_tunnel_height) {
+
+                draw_tunnel_unit(0, i, world.tex);
+        }
+
         if (    CheckCollisionPointRec(hitbox_character, hitbox_tunnel_left) ||
                 CheckCollisionPointRec(hitbox_character, hitbox_tunnel_right)) {
                 current_worldstate = W_DEATH;
         }
-        world.cam.target = (Vector2){ 0, speed+world.cam.target.y };
 
 	if (hitbox_character.y >= starting_height) {
 		current_worldstate = W_PLAY;
@@ -188,7 +192,6 @@ void world_death()
 {
 	draw_character_fall(charmain.x, charmain.y);
         recursive_draw();
-	speed = 10;
         if (IsMouseButtonPressed(0) &&
         !(GetScreenToWorld2D(GetMousePosition(), world.cam).x <= -tunnel_spacing) &&
         !(GetScreenToWorld2D(GetMousePosition(), world.cam).x  >= tunnel_spacing)) {
@@ -200,12 +203,12 @@ void recursive_draw()
 {
 	float i;
 	float j;
+	int tmp = 1;
+
         unit_max =      GetScreenToWorld2D(
                         (Vector2){screen_width, screen_height}, world.cam);
         unit_min =      GetScreenToWorld2D(
                         (Vector2){0, 0}, world.cam);
-
-/* vertical drawing */
 
         for (i  = floor(unit_min.y/real_tunnel_height);
 	i <= unit_max.y;
@@ -219,14 +222,7 @@ void recursive_draw()
         	}
         }
 
-/* horizontal drawing */
-/*
-	for (i = tunnel_spacing) {
-	}
-*/
 /*temp obstacle code*/
-
-	int tmp = 1;
 
         for (i  = floor(unit_min.y/real_tunnel_height);
 	i <= unit_max.y;
