@@ -2,7 +2,6 @@
 #define SCENE_H
 
 void screen_load_font();
-void scene_unload_title();
 void screen_load_title();
 void screen_draw_title();
 void screen_draw_play();

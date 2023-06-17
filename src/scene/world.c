@@ -17,11 +17,11 @@ struct character charmain;
 
 int offset              = 0;
 int tunnel_spacing      = 150;
-int tunnel_height       = 0;
 int real_tunnel_height;
 int real_tunnel_width;
 int seed		= 0; 
 int starting_height	= 10*100; /*real world position is shown divided by 100 in game*/
+int visibility		= 427;
 
 Vector2 hitbox_character;
 Rectangle hitbox_tunnel_left;
@@ -37,9 +37,6 @@ float obstacle_scale	= 0.05;
 Vector2 unit_max;
 Vector2 unit_min;
 
-bool started            = false;
-bool starting           = true;
-
 Texture2D outer_world_tex;
 
 void world_load()
@@ -49,7 +46,7 @@ void world_load()
         world.cam.target = (Vector2){ 0, 0 };
         world.cam.offset = (Vector2){ screen_width/2.0f, screen_height/2.0f };
         world.cam.rotation = 0.0f;
-        world.cam.zoom = ((float)screen_height / 427.0f) / 2.0f;
+        world.cam.zoom = ((float)screen_height / visibility) / 2;
 	world.obstacletex = LoadTexture("obstacle.png");
 	world.character = LoadTexture("bury_fall.png");
 	outer_world_tex = LoadTexture("dirt_outer.png");
@@ -98,7 +95,6 @@ void world_static()
 void world_transition()
 {
 	world.cam.target = (Vector2){ 0.0f, screen_height/4 };
-	starting = false;
 	current_worldstate = W_PLAY;
 }
 
@@ -292,7 +288,7 @@ void draw_tunnel_unit(float x, float y, Texture2D tex)
                 (Rectangle){0, 0, tex.width, tex.height},
                 (Rectangle){
                         -tunnel_spacing - x,
-                        tunnel_height + y,
+                        y,
                         (tex.width*tunnel_scale),
                         (tex.height*tunnel_scale)},
                 (Vector2){tex.width*tunnel_scale, 0}, 
@@ -305,7 +301,7 @@ void draw_tunnel_unit(float x, float y, Texture2D tex)
                 (Rectangle){0, 0, -tex.width, tex.height},
                 (Rectangle){
                         tunnel_spacing + x,
-                        tunnel_height + y,
+                        y,
                         (tex.width*tunnel_scale),
                         (tex.height*tunnel_scale)},
                 (Vector2){0, 0}, 

@@ -13,8 +13,6 @@ extern enum worldstate current_worldstate;
 
 extern float speed;
 extern Vector2 hitbox_character;
-extern Rectangle hitbox_tunnel_left;
-extern Rectangle hitbox_tunnel_right;
 
 /*
 universal data
