@@ -9,6 +9,7 @@
 #include <math.h>
 
 struct resource title;
+extern int tunnel_spacing;
 
 void screen_load_font()
 {
@@ -31,7 +32,7 @@ void screen_load_font()
 	free(codepointsNoDups);
 */
         title.noto = LoadFontEx(
-                "font/noto/NotoSerifSC-Regular.otf",
+                "font/temp/NotoSans-Regular.ttf",
                 50,
                 NULL,
                 0);
@@ -145,7 +146,9 @@ void screen_draw_death()
                 5,
                 BLACK);
 
-        if (IsMouseButtonPressed(0)) {
+        if (IsMouseButtonPressed(0) &&
+        !(GetScreenToWorld2D(GetMousePosition(), world.cam).x <= -tunnel_spacing) &&
+        !(GetScreenToWorld2D(GetMousePosition(), world.cam).x  >= tunnel_spacing)) {
                 screen_load_font();
                 current_scene = S_TITLELOAD;
         }

@@ -19,6 +19,7 @@ int offset              = 0;
 int tunnel_spacing      = 150;
 int tunnel_height       = 0;
 int real_tunnel_height;
+int real_tunnel_width;
 int seed		= 0; 
 int starting_height	= 10*100; /*real world position is shown divided by 100 in game*/
 
@@ -33,11 +34,13 @@ float terminal_velocity;
 float character_scale	= 0.15;
 float tunnel_scale      = 0.25;
 float obstacle_scale	= 0.05;
-float unit_max;
-float unit_min;
+Vector2 unit_max;
+Vector2 unit_min;
 
 bool started            = false;
 bool starting           = true;
+
+Texture2D outer_world_tex;
 
 void world_load()
 {
@@ -46,11 +49,15 @@ void world_load()
         world.cam.target = (Vector2){ 0, 0 };
         world.cam.offset = (Vector2){ screen_width/2.0f, screen_height/2.0f };
         world.cam.rotation = 0.0f;
-        world.cam.zoom = 1.0f;
+	float tmp = ((float)screen_height / 427.0f) / 2.0f;
+        world.cam.zoom = tmp;
 
 	world.obstacletex = LoadTexture("obstacle.png");
 
 	world.character = LoadTexture("bury_fall.png");
+
+	outer_world_tex = LoadTexture("dirt_outer.png");
+
 
 	speed = 10;
 	acceleration = 0.005;
@@ -58,7 +65,8 @@ void world_load()
 
 	charmain.move = 10;
 	real_tunnel_height = world.tex.height*tunnel_scale;	
-	
+	real_tunnel_width = world.tex.width*tunnel_scale;
+
 	srand(time(NULL));
 	seed = rand();
 	puts("world loaded");
@@ -109,13 +117,13 @@ void world_play()
 
         hitbox_tunnel_left = (Rectangle){
                         -tunnel_spacing-(world.tex.width*tunnel_scale),
-                        floor(unit_min),
+                        floor(unit_min.y),
                         (world.tex.width*tunnel_scale),
                         (world.tex.height*tunnel_scale)};
 
         hitbox_tunnel_right = (Rectangle){
                         tunnel_spacing,
-                        floor(unit_min),
+                        floor(unit_min.y),
                         (world.tex.width*tunnel_scale),
                         (world.tex.height*tunnel_scale)};
 
@@ -139,28 +147,28 @@ void world_starting()
         hitbox_character = (Vector2) {charmain.x, charmain.y};
         draw_character_fall(charmain.x, charmain.y);
 
-        unit_max =      (float)(GetScreenToWorld2D(
-                        (Vector2){screen_width, screen_height}, world.cam).y);
-        unit_min =      (float)(GetScreenToWorld2D(
-                        (Vector2){0, 0}, world.cam).y);
+        unit_max =      GetScreenToWorld2D(
+                        (Vector2){screen_width, screen_height}, world.cam);
+        unit_min =      GetScreenToWorld2D(
+                        (Vector2){0, 0}, world.cam);
 
 	float i;
-        for (i  = floor(unit_min/real_tunnel_height);
-                        i <= unit_max;
+        for (i  = floor(unit_min.y/real_tunnel_height);
+                        i <= unit_max.y;
                         i += real_tunnel_height) {
 
-                draw_tunnel_unit(i);
+                draw_tunnel_unit(0, i, world.tex);
         }
 
         hitbox_tunnel_left = (Rectangle){
                         -tunnel_spacing-(world.tex.width*tunnel_scale),
-                        floor(unit_min),
+                        floor(unit_min.y),
                         (world.tex.width*tunnel_scale),
                         (world.tex.height*tunnel_scale)};
 
         hitbox_tunnel_right = (Rectangle){
                         tunnel_spacing,
-                        floor(unit_min),
+                        floor(unit_min.y),
                         (world.tex.width*tunnel_scale),
                         (world.tex.height*tunnel_scale)};
 
@@ -191,23 +199,37 @@ void world_death()
 void recursive_draw() 
 {
 	float i;
-        unit_max =      (float)(GetScreenToWorld2D(
-                        (Vector2){screen_width, screen_height}, world.cam).y);
-        unit_min =      (float)(GetScreenToWorld2D(
-                        (Vector2){0, 0}, world.cam).y);
+	float j;
+        unit_max =      GetScreenToWorld2D(
+                        (Vector2){screen_width, screen_height}, world.cam);
+        unit_min =      GetScreenToWorld2D(
+                        (Vector2){0, 0}, world.cam);
 
-        for (i  = floor(unit_min/real_tunnel_height);
-	i <= unit_max;
+/* vertical drawing */
+
+        for (i  = floor(unit_min.y/real_tunnel_height);
+	i <= unit_max.y;
 	i += real_tunnel_height) {
+                draw_tunnel_unit(0, i, world.tex);
 
-                draw_tunnel_unit(i);
+	        for (j  = tunnel_scale + real_tunnel_width;
+        	j <= unit_max.x;
+        	j += real_tunnel_width) {
+        	        draw_tunnel_unit(j, i, outer_world_tex); 
+        	}
         }
+
+/* horizontal drawing */
+/*
+	for (i = tunnel_spacing) {
+	}
+*/
 /*temp obstacle code*/
 
 	int tmp = 1;
 
-        for (i  = floor(unit_min/real_tunnel_height);
-	i <= unit_max;
+        for (i  = floor(unit_min.y/real_tunnel_height);
+	i <= unit_max.y;
 	i += real_tunnel_height) {
 		if (i < starting_height) {
 
@@ -266,30 +288,30 @@ void draw_obstacle_unit(Rectangle draw_where)
                 WHITE);
 
 }
-void draw_tunnel_unit(float offset)
+void draw_tunnel_unit(float x, float y, Texture2D tex)
 {
 	/*tunnel 1 (left)*/
         DrawTexturePro(
-                world.tex,
-                (Rectangle){0, 0, world.tex.width, world.tex.height},
+                tex,
+                (Rectangle){0, 0, tex.width, tex.height},
                 (Rectangle){
-                        -tunnel_spacing,
-                        tunnel_height + offset,
-                        (world.tex.width*tunnel_scale),
-                        (world.tex.height*tunnel_scale)},
-                (Vector2){world.tex.width*tunnel_scale, 0}, 
+                        -tunnel_spacing - x,
+                        tunnel_height + y,
+                        (tex.width*tunnel_scale),
+                        (tex.height*tunnel_scale)},
+                (Vector2){tex.width*tunnel_scale, 0}, 
                 0,
                 WHITE);
 
         /*tunnel 2 (right)*/
         DrawTexturePro(
-                world.tex,
-                (Rectangle){0, 0, -world.tex.width, world.tex.height},
+                tex,
+                (Rectangle){0, 0, -tex.width, tex.height},
                 (Rectangle){
-                        tunnel_spacing,
-                        tunnel_height + offset,
-                        (world.tex.width*tunnel_scale),
-                        (world.tex.height*tunnel_scale)},
+                        tunnel_spacing + x,
+                        tunnel_height + y,
+                        (tex.width*tunnel_scale),
+                        (tex.height*tunnel_scale)},
                 (Vector2){0, 0}, 
                 0,
                 WHITE);
