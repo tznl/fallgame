@@ -130,14 +130,22 @@ void world_static()
 
 void world_transition()
 {
-        seed = rand();
+        charmain.x = GetScreenToWorld2D(GetMousePosition(), world.cam).x;
+        charmain.y = (int)floor(GetScreenToWorld2D((Vector2){
+                screen_width, screen_height/4}, world.cam).y);
+        hitbox_character = (Vector2) {charmain.x, charmain.y};
+
 	tmp_collide = false;
-	world.cam.target = (Vector2){ 0.0f, screen_height/4 };
+        seed = rand();
+        recursive_draw_env();
+        draw_character_fall(charmain.x, charmain.y);
+        recursive_draw();
 	sound_volume = 0;
 	speed = begin_speed;
 	SetSoundVolume(falling_sound, sound_volume);
 	PlaySound(falling_sound);
 	current_worldstate = W_PLAY;
+	world.cam.target = (Vector2){ 0.0f, screen_height/4 };
 }
 
 void world_play()
