@@ -123,7 +123,7 @@ void screen_draw_death()
         char speedarray[64];
         sprintf(speedarray, "%d", (int)speed);
 
-	float restart_scale = screen_width/(screen_width/0.4);
+	float restart_scale = (float)screen_width/(1125);
 
         int speed_size = MeasureTextEx(
                 title.noto,
