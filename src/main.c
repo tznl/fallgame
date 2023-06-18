@@ -12,9 +12,8 @@ int main()
 #endif
 
 
-	screen_height = GetMonitorHeight(GetCurrentMonitor());
-	screen_width = GetMonitorWidth(GetCurrentMonitor()); 
 	InitWindow(screen_width, screen_height, "fallgame");
+	InitAudioDevice();
 	SetTargetFPS(fps_cap);
 	
 
@@ -46,6 +45,7 @@ int main()
 		EndDrawing();
 	}
 
+	CloseAudioDevice();
         CloseWindow();
 
 	return 0;

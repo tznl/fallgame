@@ -53,7 +53,7 @@ void screen_load_title()
 void screen_draw_title()
 {
 	extern int tunnel_spacing;
-	float text_scale = screen_width/(screen_width/0.4);
+	float text_scale = world.cam.zoom*0.25;
 
         if (IsMouseButtonPressed(0) &&
         !(GetScreenToWorld2D(GetMousePosition(), world.cam).x <= -tunnel_spacing) &&
@@ -123,7 +123,7 @@ void screen_draw_death()
         char speedarray[64];
         sprintf(speedarray, "%d", (int)speed);
 
-	float restart_scale = (float)screen_width/(1125);
+	float restart_scale = world.cam.zoom*0.35;
 
         int speed_size = MeasureTextEx(
                 title.noto,
