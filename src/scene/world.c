@@ -256,7 +256,7 @@ void recursive_draw()
                         (world.tex.height*tunnel_scale)};
 
         for (i  = floor(unit_min.y/real_tunnel_height);
-	i <= unit_max.y*2;
+	i <= unit_max.y;
 	i += real_tunnel_height) {
                 draw_tunnel_unit(tunnel_spacing, i, world.tex);
                 if (CheckCollisionCircleRec(
@@ -282,7 +282,7 @@ void recursive_draw()
 /*temp obstacle code*/
 
         for (i  = floor(unit_min.y/real_tunnel_height);
-	i <= unit_max.y*2;
+	i <= unit_max.y;
 	i += real_tunnel_height) {
 		if (i < starting_height) {
 			continue;
