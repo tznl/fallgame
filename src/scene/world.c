@@ -125,11 +125,12 @@ void world_static()
                 0,
                 WHITE);
 
-		recursive_draw();
+	recursive_draw();
 }
 
 void world_transition()
 {
+        seed = rand();
 	tmp_collide = false;
 	world.cam.target = (Vector2){ 0.0f, screen_height/4 };
 	sound_volume = 0;
@@ -146,10 +147,10 @@ void world_play()
 		screen_width, screen_height/4}, world.cam).y);
 	hitbox_character = (Vector2) {charmain.x, charmain.y};
 
+        play_sound();
 	recursive_draw_env();
 	draw_character_fall(charmain.x, charmain.y);
 	recursive_draw();
-	play_sound();
 
 	if (tmp_collide) {
 		current_worldstate = W_DEATH;
@@ -270,12 +271,12 @@ void recursive_draw()
                         draw_tunnel_right(
 				tunnel_spacing, charmain.y-(real_tunnel_height/1.25), 
 				tunnel_inner_death);
+		}
 	        for (j  = tunnel_scale + real_tunnel_width;
         	j <= unit_max.x;
         	j += real_tunnel_width) {
         	        draw_tunnel_unit(j + tunnel_spacing, i, outer_world_tex);
-                        }
-        	}
+                }
         }
 
 /*temp obstacle code*/

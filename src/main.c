@@ -11,8 +11,8 @@ int main()
 	ChangeDirectory("./assets");
 #endif
 
-
 	InitWindow(screen_width, screen_height, "fallgame");
+
 	InitAudioDevice();
 	SetTargetFPS(fps_cap);
 	
