@@ -105,12 +105,6 @@ void play_sound()
 
 void world_static()
 {
-        if (IsMouseButtonPressed(0) &&
-	!(GetScreenToWorld2D(GetMousePosition(), world.cam).x <= -tunnel_spacing) &&
-	!(GetScreenToWorld2D(GetMousePosition(), world.cam).x  >= tunnel_spacing)) {
-                current_worldstate = W_TRANSITION;
-        }
-	
 	recursive_draw_env();
         DrawTexturePro(
                 world.character,
@@ -133,7 +127,7 @@ void world_transition()
         charmain.x = GetScreenToWorld2D(GetMousePosition(), world.cam).x;
         charmain.y = (int)floor(GetScreenToWorld2D((Vector2){
                 screen_width, screen_height/4}, world.cam).y);
-        hitbox_character = (Vector2) {charmain.x, charmain.y};
+        hitbox_character = (Vector2) {0, 0};
 
 	tmp_collide = false;
         seed = rand();
@@ -145,6 +139,7 @@ void world_transition()
 	SetSoundVolume(falling_sound, sound_volume);
 	PlaySound(falling_sound);
 	current_worldstate = W_PLAY;
+	current_scene = S_PLAY;
 	world.cam.target = (Vector2){ 0.0f, screen_height/4 };
 }
 
@@ -196,18 +191,6 @@ void world_starting()
 
 	draw_character_fall(charmain.x, charmain.y);
 
-        hitbox_tunnel_left = (Rectangle){
-                        -tunnel_spacing-(world.tex.width*tunnel_scale),
-                        floor(unit_min.y),
-                        (world.tex.width*tunnel_scale),
-                        (world.tex.height*tunnel_scale)};
-
-        hitbox_tunnel_right = (Rectangle){
-                        tunnel_spacing,
-                        floor(unit_min.y),
-                        (world.tex.width*tunnel_scale),
-                        (world.tex.height*tunnel_scale)};
-
         for (i  = floor(unit_min.y/real_tunnel_height);
                         i <= unit_max.y;
                         i += real_tunnel_height) {
@@ -215,11 +198,13 @@ void world_starting()
                 draw_tunnel_unit(tunnel_spacing, i, world.tex);
         }
 
-        if (    CheckCollisionPointRec(hitbox_character, hitbox_tunnel_left) ||
-                CheckCollisionPointRec(hitbox_character, hitbox_tunnel_right)) {
+        if (tmp_collide ||
+        charmain.x >= tunnel_spacing ||
+        charmain.x <= -tunnel_spacing) {
                 current_worldstate = W_DEATH;
-		PlaySound(death_sound);
-        }
+                current_scene = S_DEATH;
+                PlaySound(death_sound);
+	}
 
 	if (hitbox_character.y >= starting_height) {
 		current_worldstate = W_PLAY;
@@ -229,17 +214,14 @@ void world_starting()
 
 void world_death() 
 {
-	recursive_draw_env();
-	draw_character_fall(charmain.x, charmain.y+=speed);
-        recursive_draw();
         if (IsSoundPlaying(falling_sound)) {
                 StopSound(falling_sound);
         }
-        if (IsMouseButtonPressed(0) &&
-        !(GetScreenToWorld2D(GetMousePosition(), world.cam).x <= -tunnel_spacing) &&
-        !(GetScreenToWorld2D(GetMousePosition(), world.cam).x  >= tunnel_spacing)) {
-                current_worldstate = W_TRANSITION;
-        }
+
+
+	recursive_draw_env();
+	draw_character_fall(charmain.x, charmain.y+=speed);
+        recursive_draw();
 }
 
 void recursive_draw() 

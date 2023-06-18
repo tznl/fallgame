@@ -60,6 +60,7 @@ void screen_draw_title()
         !(GetScreenToWorld2D(GetMousePosition(), world.cam).x  >= tunnel_spacing)) {
                 screen_load_font();
 		current_scene = S_TITLELOAD;
+		current_worldstate = W_TRANSITION;
         }
 
         DrawTexturePro(
@@ -172,5 +173,6 @@ void screen_draw_death()
         !(GetScreenToWorld2D(GetMousePosition(), world.cam).x  >= tunnel_spacing)) {
                 screen_load_font();
                 current_scene = S_TITLELOAD;
+		current_worldstate = W_TRANSITION;
         }
 }
