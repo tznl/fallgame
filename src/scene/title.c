@@ -11,6 +11,7 @@
 struct resource title;
 extern int tunnel_spacing;
 Texture2D restart_text;
+float font_scale;
 
 void screen_load_font()
 {
@@ -43,6 +44,7 @@ void screen_load_font()
 
 void screen_load_title()
 {
+	font_scale = screen_height/20;
 	restart_text = LoadTexture("restart.png");
 	title.tex  = LoadTexture("title.png");	
 	SetTextureFilter(title.noto.texture, TEXTURE_FILTER_BILINEAR);
@@ -51,7 +53,7 @@ void screen_load_title()
 void screen_draw_title()
 {
 	extern int tunnel_spacing;
-        float font_scale = 0.25;
+	float text_scale = screen_width/(screen_width/0.4);
 
         if (IsMouseButtonPressed(0) &&
         !(GetScreenToWorld2D(GetMousePosition(), world.cam).x <= -tunnel_spacing) &&
@@ -66,11 +68,11 @@ void screen_draw_title()
                 (Rectangle){
                         screen_width/2,
                         screen_height/4,
-                        (title.tex.width*font_scale),
-                        (title.tex.height*font_scale)},
+                        (title.tex.width*text_scale),
+                        (title.tex.height*text_scale)},
                 (Vector2){(
-			title.tex.width*font_scale)/2, 
-			title.tex.height*font_scale/2}, 
+			title.tex.width*text_scale)/2, 
+			title.tex.height*text_scale/2}, 
                 0,
                 WHITE);
 }
@@ -87,20 +89,20 @@ void screen_draw_play()
         int pos_size = MeasureTextEx(
                 title.noto,
                 posarray,
-                48,
+                font_scale,
                 5).x;
 
         int speed_size = MeasureTextEx(
                 title.noto,
                 speedarray,
-                48,
+                font_scale,
                 5).x;
 
         DrawTextEx(
                 title.noto,
                 posarray,
                 (Vector2){(screen_width/2) - (pos_size/2), (screen_height/50)},
-                48,
+                font_scale,
                 5,
                 BLACK);
 
@@ -108,7 +110,7 @@ void screen_draw_play()
                 title.noto,
                 speedarray,
                 (Vector2){(screen_width/12) - (speed_size/2), (screen_height/50)},
-                48,
+                font_scale,
                 5,
                 BLACK);
 }
@@ -121,25 +123,25 @@ void screen_draw_death()
         char speedarray[64];
         sprintf(speedarray, "%d", (int)speed);
 
-	float restart_scale = 0.42;
+	float restart_scale = screen_width/(screen_width/0.4);
 
         int speed_size = MeasureTextEx(
                 title.noto,
                 speedarray,
-                48,
+                font_scale,
                 5).x;
 
 	int pos_size = MeasureTextEx(
 		title.noto,
 		posarray,
-		48,
+		font_scale,
 		5).x;
 
         DrawTextEx(
                 title.noto, 
                 posarray, 
                 (Vector2){(screen_width/2) - (pos_size/2), (screen_height/50)},
-                48,
+                font_scale,
                 5,
                 BLACK);
 
@@ -147,7 +149,7 @@ void screen_draw_death()
                 title.noto,
                 speedarray,
                 (Vector2){(screen_width/12) - (speed_size/2), (screen_height/50)},
-                48,
+                font_scale,
                 5,
                 BLACK);
 
