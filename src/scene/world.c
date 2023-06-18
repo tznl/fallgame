@@ -28,6 +28,7 @@ Rectangle hitbox_tunnel_left;
 Rectangle hitbox_tunnel_right;
 
 float collision_radius = 1;
+float begin_speed = 10;
 float speed;
 float acceleration;
 float terminal_velocity;
@@ -36,8 +37,12 @@ float tunnel_scale      = 0.25;
 float obstacle_scale	= 0.05;
 Vector2 unit_max;
 Vector2 unit_min;
+Vector2 start_unit_max;
+Vector2 start_unit_min;
 
+Texture2D sky_background;
 Texture2D outer_world_tex;
+Texture2D tunnel_background;
 
 void world_load()
 {
@@ -50,9 +55,15 @@ void world_load()
 	world.obstacletex = LoadTexture("obstacle.png");
 	world.character = LoadTexture("bury_fall.png");
 	outer_world_tex = LoadTexture("dirt_outer.png");
+	tunnel_background = LoadTexture("dirt_background.png");
+	sky_background = LoadTexture("sky.png");
 
+        start_unit_max =      GetScreenToWorld2D(
+                        (Vector2){screen_width, screen_height}, world.cam);
+        start_unit_min =      GetScreenToWorld2D(
+                        (Vector2){0, 0}, world.cam);
 
-	speed = 10;
+	speed = begin_speed;
 
 	acceleration = 0.005;
 
@@ -75,7 +86,8 @@ void world_static()
 	!(GetScreenToWorld2D(GetMousePosition(), world.cam).x  >= tunnel_spacing)) {
                 current_worldstate = W_TRANSITION;
         }
-
+	
+	recursive_draw_env();
         DrawTexturePro(
                 world.character,
                 (Rectangle){0, 0, world.character.width, world.character.height},
@@ -95,6 +107,7 @@ void world_static()
 void world_transition()
 {
 	world.cam.target = (Vector2){ 0.0f, screen_height/4 };
+	speed = begin_speed;
 	current_worldstate = W_PLAY;
 }
 
@@ -104,8 +117,9 @@ void world_play()
 	charmain.y = (int)floor(GetScreenToWorld2D((Vector2){
 		screen_width, screen_height/4}, world.cam).y);
 	hitbox_character = (Vector2) {charmain.x, charmain.y};
-	draw_character_fall(charmain.x, charmain.y);
 
+	recursive_draw_env();
+	draw_character_fall(charmain.x, charmain.y);
 	recursive_draw();
 
         hitbox_tunnel_left = (Rectangle){
@@ -169,8 +183,8 @@ void world_starting()
         for (i  = floor(unit_min.y/real_tunnel_height);
                         i <= unit_max.y;
                         i += real_tunnel_height) {
-
-                draw_tunnel_unit(0, i, world.tex);
+		recursive_draw_env();
+                draw_tunnel_unit(tunnel_spacing, i, world.tex);
         }
 
         if (    CheckCollisionPointRec(hitbox_character, hitbox_tunnel_left) ||
@@ -186,6 +200,7 @@ void world_starting()
 
 void world_death() 
 {
+	recursive_draw_env();
 	draw_character_fall(charmain.x, charmain.y);
         recursive_draw();
         if (IsMouseButtonPressed(0) &&
@@ -209,12 +224,11 @@ void recursive_draw()
         for (i  = floor(unit_min.y/real_tunnel_height);
 	i <= unit_max.y;
 	i += real_tunnel_height) {
-                draw_tunnel_unit(0, i, world.tex);
-
+                draw_tunnel_unit(tunnel_spacing, i, world.tex);
 	        for (j  = tunnel_scale + real_tunnel_width;
         	j <= unit_max.x;
         	j += real_tunnel_width) {
-        	        draw_tunnel_unit(j, i, outer_world_tex); 
+        	        draw_tunnel_unit(j + tunnel_spacing, i, outer_world_tex); 
         	}
         }
 
@@ -224,7 +238,6 @@ void recursive_draw()
 	i <= unit_max.y;
 	i += real_tunnel_height) {
 		if (i < starting_height) {
-
 			continue;
 		}
 
@@ -242,6 +255,55 @@ void recursive_draw()
 	        }
         }
 
+}
+
+void recursive_draw_env()
+{
+        float i;
+
+        unit_max =      GetScreenToWorld2D(
+                        (Vector2){screen_width, screen_height}, world.cam);
+        unit_min =      GetScreenToWorld2D(
+                        (Vector2){0, 0}, world.cam);
+	float ultimate_max;
+	if (unit_min.y <= 0) {
+	        if ((screen_width) >= screen_height/2) {
+                	ultimate_max = start_unit_max.x*2;
+        	} else {
+        	ultimate_max = fabs(start_unit_min.y);
+        	}
+
+        	Rectangle background = (Rectangle){
+        	        -(ultimate_max/2),
+        	        -(ultimate_max),
+        	        ultimate_max,
+        	        ultimate_max};
+
+        	DrawTexturePro(
+        	        sky_background,
+        	        (Rectangle) {0, 0, tunnel_background.width, tunnel_background.height},
+        	        background,
+        	        (Vector2){0, 0},
+        	        0,
+        	        WHITE);
+	}
+
+
+        for (i  = floor(unit_min.y/real_tunnel_height);
+        i <= unit_max.y;
+        i += real_tunnel_height) {
+		DrawTexturePro(
+                	tunnel_background,
+                	(Rectangle){0, 0, tunnel_background.width, tunnel_background.height},
+                	(Rectangle){
+                	        -tunnel_spacing,
+                	        i,
+                	        (tunnel_spacing*2),
+                	        (tunnel_background.height*tunnel_scale)},
+                	(Vector2){0, 0},
+                	0,
+                	WHITE);
+	}
 }
 
 int obstacle_randomizer(int* x)
@@ -287,7 +349,7 @@ void draw_tunnel_unit(float x, float y, Texture2D tex)
                 tex,
                 (Rectangle){0, 0, tex.width, tex.height},
                 (Rectangle){
-                        -tunnel_spacing - x,
+                        -x,
                         y,
                         (tex.width*tunnel_scale),
                         (tex.height*tunnel_scale)},
@@ -300,7 +362,7 @@ void draw_tunnel_unit(float x, float y, Texture2D tex)
                 tex,
                 (Rectangle){0, 0, -tex.width, tex.height},
                 (Rectangle){
-                        tunnel_spacing + x,
+                        x,
                         y,
                         (tex.width*tunnel_scale),
                         (tex.height*tunnel_scale)},

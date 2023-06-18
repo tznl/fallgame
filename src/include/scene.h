@@ -18,5 +18,5 @@ void draw_tunnel_unit(float x, float y, Texture2D tex);
 void draw_character_fall(int x, int y);
 int obstacle_randomizer(int* x);
 void recursive_draw();
-
+void recursive_draw_env();
 #endif

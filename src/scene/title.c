@@ -10,6 +10,7 @@
 
 struct resource title;
 extern int tunnel_spacing;
+Texture2D restart_text;
 
 void screen_load_font()
 {
@@ -42,6 +43,7 @@ void screen_load_font()
 
 void screen_load_title()
 {
+	restart_text = LoadTexture("restart.png");
 	title.tex  = LoadTexture("title.png");	
 	SetTextureFilter(title.noto.texture, TEXTURE_FILTER_BILINEAR);
 }
@@ -113,23 +115,17 @@ void screen_draw_play()
 
 void screen_draw_death()
 {
-        char* restart_array = "tap again to restart";
-
         char posarray[64];
         sprintf(posarray, "%d", (int)hitbox_character.y/100);
 
         char speedarray[64];
         sprintf(speedarray, "%d", (int)speed);
 
+	float restart_scale = 0.42;
+
         int speed_size = MeasureTextEx(
                 title.noto,
                 speedarray,
-                48,
-                5).x;
-
-        int restart_size = MeasureTextEx(
-                title.noto,
-                restart_array,
                 48,
                 5).x;
 
@@ -155,13 +151,19 @@ void screen_draw_death()
                 5,
                 BLACK);
 
-        DrawTextEx(
-                title.noto,
-                restart_array,
-                (Vector2){(screen_width/2) - (restart_size/2), (screen_height/2)},
-                48,
-                5,
-                BLACK);
+        DrawTexturePro(
+                restart_text,
+                (Rectangle){0, 0, restart_text.width, restart_text.height},
+                (Rectangle){
+                        screen_width/2,
+                        screen_height/2,
+                        (restart_text.width*restart_scale),
+                        (restart_text.height*restart_scale)},
+                (Vector2){(
+                        restart_text.width*restart_scale)/2, 
+                        restart_text.height*restart_scale/2}, 
+                0,
+                WHITE);
 
         if (IsMouseButtonPressed(0) &&
         !(GetScreenToWorld2D(GetMousePosition(), world.cam).x <= -tunnel_spacing) &&

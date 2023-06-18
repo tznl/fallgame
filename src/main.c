@@ -28,7 +28,7 @@ int main()
 		BeginDrawing();
 	        if (IsKeyPressed(KEY_J)) {
 	                screen_height = 1000;
-			screen_width = 540;
+			screen_width = 450;
 			SetWindowSize(screen_width, screen_height);
 			resource_start();
 	        }
@@ -38,7 +38,6 @@ int main()
                         screen_width = GetRenderWidth();
                         SetWindowSize(screen_width, screen_height);
 			resource_start();
-			printf("First scene loaded\n");
 			init_loaded = true;
 		}
 		world_draw();
