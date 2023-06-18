@@ -160,7 +160,9 @@ void world_play()
 	draw_character_fall(charmain.x, charmain.y);
 	recursive_draw();
 
-	if (tmp_collide) {
+	if (tmp_collide ||
+	charmain.x >= tunnel_spacing ||
+	charmain.x <= -tunnel_spacing) {
 		current_worldstate = W_DEATH;
 		current_scene = S_DEATH;
 		PlaySound(death_sound);
