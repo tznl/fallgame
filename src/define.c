@@ -15,4 +15,5 @@ universal data
 enum GameScreen current_scene = S_TITLE;
 int screen_width;
 int screen_height;
-int fps_cap      = 60; 
+int fps_cap      = 60;
+char personal_best[10]; 

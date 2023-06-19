@@ -158,9 +158,11 @@ void world_play()
 	if (tmp_collide ||
 	charmain.x >= tunnel_spacing ||
 	charmain.x <= -tunnel_spacing) {
+		sprintf(personal_best, "%d", (int)hitbox_character.y/100);
 		current_worldstate = W_DEATH;
 		current_scene = S_DEATH;
 		PlaySound(death_sound);
+		SaveFileText("save/personal_record", personal_best);
 	}
 	world.cam.target = (Vector2){ 0, speed+world.cam.target.y };
 
@@ -221,6 +223,7 @@ void world_death()
 
 	recursive_draw_env();
 	draw_character_fall(charmain.x, charmain.y+=speed);
+
         recursive_draw();
 }
 

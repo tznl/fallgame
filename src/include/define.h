@@ -21,7 +21,7 @@ universal data
 extern int screen_width;
 extern int screen_height;
 extern int fps_cap;
-
+extern char personal_best[10];
 struct resource
 {
 	Texture2D obstacletex;

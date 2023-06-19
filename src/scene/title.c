@@ -39,11 +39,13 @@ void screen_load_font()
                 NULL,
                 0);
 	SetTextureFilter(title.noto.texture, TEXTURE_FILTER_BILINEAR);
-	current_scene = S_PLAY;
 }
 
 void screen_load_title()
 {
+	screen_load_font();
+	sprintf(personal_best, "%s", LoadFileText("save/personal_record"));
+
 	font_scale = screen_height/20;
 	restart_text = LoadTexture("restart.png");
 	title.tex  = LoadTexture("title.png");	
@@ -54,12 +56,18 @@ void screen_draw_title()
 {
 	extern int tunnel_spacing;
 	float text_scale = world.cam.zoom*0.25;
+	char pb_cat[24] = "personal best ";
+	strcat(pb_cat, personal_best);
+        int pb_size = MeasureTextEx(
+                title.noto,
+                pb_cat,
+                font_scale,
+                5).x;
 
         if (IsMouseButtonPressed(0) &&
         !(GetScreenToWorld2D(GetMousePosition(), world.cam).x <= -tunnel_spacing) &&
         !(GetScreenToWorld2D(GetMousePosition(), world.cam).x  >= tunnel_spacing)) {
-                screen_load_font();
-		current_scene = S_TITLELOAD;
+		current_scene = S_PLAY;
 		current_worldstate = W_TRANSITION;
         }
 
@@ -76,6 +84,16 @@ void screen_draw_title()
 			title.tex.height*text_scale/2}, 
                 0,
                 WHITE);
+
+	if (strcmp(personal_best, "0") != 0) {
+        DrawTextEx(
+                title.noto,
+                pb_cat,
+                (Vector2){(screen_width/2) - (pb_size/2), (screen_height/50)},
+                font_scale,
+                5,
+                BLACK);
+	}
 }
 
 
@@ -118,30 +136,51 @@ void screen_draw_play()
 
 void screen_draw_death()
 {
-        char posarray[64];
-        sprintf(posarray, "%d", (int)hitbox_character.y/100);
+        char pb_cat[24] = "personal best ";
+        strcat(pb_cat, personal_best);
+
+        char posarray[64] = "current attempt ";
+	char posbuffer[10];
+        sprintf(posbuffer, "%d", (int)hitbox_character.y/100);
+	strcat(posarray, posbuffer);
 
         char speedarray[64];
         sprintf(speedarray, "%d", (int)speed);
 
 	float restart_scale = world.cam.zoom*0.35;
 
-        int speed_size = MeasureTextEx(
+	extern float collision_radius;
+
+        Vector2 pb_size = MeasureTextEx(
+                title.noto,
+                pb_cat,
+                font_scale,
+                5);
+
+        Vector2 speed_size = MeasureTextEx(
                 title.noto,
                 speedarray,
                 font_scale,
-                5).x;
+                5);
 
-	int pos_size = MeasureTextEx(
+	Vector2 pos_size = MeasureTextEx(
 		title.noto,
 		posarray,
 		font_scale,
-		5).x;
+		5);
+
+        DrawTextEx(
+                title.noto,
+                pb_cat,
+                (Vector2){(screen_width/2) - (pb_size.x/2), (screen_height/50)},
+                font_scale,
+                5,
+                BLACK);
 
         DrawTextEx(
                 title.noto, 
                 posarray, 
-                (Vector2){(screen_width/2) - (pos_size/2), (screen_height/50)},
+                (Vector2){(screen_width/2) - (pos_size.x/2), (screen_height/50)+pb_size.y},
                 font_scale,
                 5,
                 BLACK);
@@ -149,7 +188,7 @@ void screen_draw_death()
         DrawTextEx(
                 title.noto,
                 speedarray,
-                (Vector2){(screen_width/12) - (speed_size/2), (screen_height/50)},
+                (Vector2){(screen_width/12) - (speed_size.x/2), (screen_height/50)},
                 font_scale,
                 5,
                 BLACK);
@@ -169,8 +208,10 @@ void screen_draw_death()
                 WHITE);
 
         if (IsMouseButtonPressed(0) &&
-        !(GetScreenToWorld2D(GetMousePosition(), world.cam).x <= -tunnel_spacing) &&
-        !(GetScreenToWorld2D(GetMousePosition(), world.cam).x  >= tunnel_spacing)) {
+        !(GetScreenToWorld2D(GetMousePosition(), world.cam).x <= 
+	-tunnel_spacing + collision_radius) &&
+        !(GetScreenToWorld2D(GetMousePosition(), world.cam).x  >= 
+	tunnel_spacing - collision_radius)) {
                 screen_load_font();
                 current_scene = S_TITLELOAD;
 		current_worldstate = W_TRANSITION;
