@@ -19,9 +19,9 @@ int main()
 	InitAudioDevice();
 	SetTargetFPS(fps_cap);
 
-	if (!DirectoryExists("save")) {
+	if (!FileExists("save")) {
 		mkdir("save", 0777);
-		SaveFileText("save/personal_record", "0");
+		SaveFileText("personal_record", "0");
 	}
 
 	while(!WindowShouldClose()) {

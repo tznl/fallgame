@@ -163,7 +163,7 @@ void world_play()
 		PlaySound(death_sound);
 		if (atoi(personal_best) < (int)hitbox_character.y/100) {
 			sprintf(personal_best, "%d", (int)hitbox_character.y/100);
-			SaveFileText("save/personal_record", personal_best);
+			SaveFileText("personal_record", personal_best);
 		}
 	}
 	world.cam.target = (Vector2){ 0, speed+world.cam.target.y };

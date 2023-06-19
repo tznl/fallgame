@@ -44,7 +44,7 @@ void screen_load_font()
 void screen_load_title()
 {
 	screen_load_font();
-	sprintf(personal_best, "%s", LoadFileText("save/personal_record"));
+	sprintf(personal_best, "%s", LoadFileText("personal_record"));
 
 	font_scale = screen_height/20;
 	restart_text = LoadTexture("restart.png");
@@ -85,7 +85,8 @@ void screen_draw_title()
                 0,
                 WHITE);
 
-	if (strcmp(personal_best, "0") != 0) {
+	if (strcmp(personal_best, "0") != 0 &&
+	strcmp(personal_best, "(null)") != 0) {
         DrawTextEx(
                 title.noto,
                 pb_cat,
