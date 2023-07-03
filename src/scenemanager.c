@@ -25,7 +25,6 @@ void screen_draw(void)
 {
 	switch (current_scene) {
 		case S_TITLE: screen_draw_title(); break;
-		case S_TITLELOAD: screen_load_font();  break;
 		case S_PLAY: screen_draw_play(); break; 
 		case S_NONE: break;
 		case S_DEATH: screen_draw_death(); break;

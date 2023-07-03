@@ -10,7 +10,8 @@ enum worldstate { W_STATIC = 0, W_STARTING, W_PLAY, W_DEATH, W_TRANSITION};
 
 extern struct resource world;
 extern enum worldstate current_worldstate;
-
+extern struct world_res default_res;
+extern struct world_res *current_res;
 extern float speed;
 extern Vector2 hitbox_character;
 
@@ -22,13 +23,30 @@ extern int screen_width;
 extern int screen_height;
 extern int fps_cap;
 extern char personal_best[10];
+
+void assign_default();
+
 struct resource
 {
+        Camera2D cam;
+};
+
+struct world_res
+{
+	Texture2D sky_background;
+	Texture2D outer_world_tex;
+	Texture2D tunnel_background;
+	Texture2D obstacle_death;
+	Texture2D tunnel_inner_death;
 	Texture2D obstacletex;
 	Texture2D character;
-        Camera2D cam;
-        Font noto;
 	Texture2D tex;
-	Image image;
+	Texture2D title;
+	Texture2D restart_text;
+
+	Sound falling_sound;
+	Sound death_sound;
+
+	Font font;
 };
 #endif

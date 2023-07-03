@@ -33,7 +33,8 @@ int main()
                         SetWindowSize(screen_width, screen_height);
                         resource_start();		
 		}
-	        if (IsKeyPressed(KEY_J)) {
+
+		if (IsKeyPressed(KEY_J)) {
 	                screen_height = 1000;
 			screen_width = 450;
 			SetWindowSize(screen_width, screen_height);
