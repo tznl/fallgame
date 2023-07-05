@@ -6,12 +6,12 @@ world data. move to a seperate file later
 */
 
 enum worldstate current_worldstate = W_STATIC;
-struct resource world;
 
 /*
 universal data
 */
 
+Camera2D cam;
 enum GameScreen current_scene = S_TITLE;
 int screen_width;
 int screen_height;

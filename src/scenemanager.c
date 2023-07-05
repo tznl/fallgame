@@ -6,7 +6,7 @@
 
 void world_draw(void)
 {
-	BeginMode2D(world.cam);
+	BeginMode2D(cam);
 	ClearBackground(RAYWHITE);
 
 	switch (current_worldstate) {
@@ -35,5 +35,4 @@ void screen_draw(void)
 void resource_start(void)
 {
 	world_load();
-	screen_load_title();
 }

@@ -8,12 +8,13 @@ world data. move to a seperate file later
 
 enum worldstate { W_STATIC = 0, W_STARTING, W_PLAY, W_DEATH, W_TRANSITION};
 
-extern struct resource world;
 extern enum worldstate current_worldstate;
 extern struct world_res default_res;
 extern struct world_res *current_res;
 extern float speed;
 extern Vector2 hitbox_character;
+
+extern Camera2D cam;
 
 /*
 universal data
@@ -25,11 +26,7 @@ extern int fps_cap;
 extern char personal_best[10];
 
 void assign_default();
-
-struct resource
-{
-        Camera2D cam;
-};
+void unload_current_res(void);
 
 struct world_res
 {

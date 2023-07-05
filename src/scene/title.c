@@ -8,16 +8,11 @@
 #include <stdio.h>
 #include <math.h>
 
-void screen_load_title()
-{
-	sprintf(personal_best, "%s", LoadFileText("personal_record"));
-}
-
 void screen_draw_title()
 {
 	float font_scale = screen_height/20;
 	extern int tunnel_spacing;
-	float text_scale = world.cam.zoom*0.25;
+	float text_scale = cam.zoom*0.25;
 	char pb_cat[24] = "personal best ";
 	strcat(pb_cat, personal_best);
         int pb_size = MeasureTextEx(
@@ -27,8 +22,8 @@ void screen_draw_title()
                 5).x;
 
         if (IsMouseButtonPressed(0) &&
-        !(GetScreenToWorld2D(GetMousePosition(), world.cam).x <= -tunnel_spacing) &&
-        !(GetScreenToWorld2D(GetMousePosition(), world.cam).x  >= tunnel_spacing)) {
+        !(GetScreenToWorld2D(GetMousePosition(), cam).x <= -tunnel_spacing) &&
+        !(GetScreenToWorld2D(GetMousePosition(), cam).x  >= tunnel_spacing)) {
 		current_scene = S_PLAY;
 		current_worldstate = W_TRANSITION;
         }
@@ -113,7 +108,7 @@ void screen_draw_death()
         char speedarray[64];
         sprintf(speedarray, "%d", (int)speed);
 
-	float restart_scale = world.cam.zoom*0.35;
+	float restart_scale = cam.zoom*0.35;
 
 	extern float collision_radius;
 
@@ -174,11 +169,10 @@ void screen_draw_death()
                 WHITE);
 
         if (IsMouseButtonPressed(0) &&
-        !(GetScreenToWorld2D(GetMousePosition(), world.cam).x <= 
+        !(GetScreenToWorld2D(GetMousePosition(), cam).x <= 
 	-tunnel_spacing + collision_radius) &&
-        !(GetScreenToWorld2D(GetMousePosition(), world.cam).x  >= 
+        !(GetScreenToWorld2D(GetMousePosition(), cam).x  >= 
 	tunnel_spacing - collision_radius)) {
-                current_scene = S_TITLELOAD;
 		current_worldstate = W_TRANSITION;
         }
 }

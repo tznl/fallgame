@@ -45,24 +45,19 @@ Vector2 start_unit_max;
 Vector2 start_unit_min;
 Vector2 hitbox_character;
 
-struct world_res *current_res;
-
 void world_load()
 {
-	assign_default();
-	current_res = &default_res;
 
-
-        world.cam = (Camera2D){0};
-        world.cam.target = (Vector2){ 0, 0 };
-        world.cam.offset = (Vector2){ screen_width/2.0f, screen_height/2.0f };
-        world.cam.rotation = 0.0f;
-        world.cam.zoom = ((float)screen_height / visibility) / 2;
+        cam = (Camera2D){0};
+        cam.target = (Vector2){ 0, 0 };
+        cam.offset = (Vector2){ screen_width/2.0f, screen_height/2.0f };
+        cam.rotation = 0.0f;
+        cam.zoom = ((float)screen_height / visibility) / 2;
 
         start_unit_max =      GetScreenToWorld2D(
-                        (Vector2){screen_width, screen_height}, world.cam);
+                        (Vector2){screen_width, screen_height}, cam);
         start_unit_min =      GetScreenToWorld2D(
-                        (Vector2){0, 0}, world.cam);
+                        (Vector2){0, 0}, cam);
 
 	speed = begin_speed;
 
@@ -111,9 +106,9 @@ void world_static()
 
 void world_transition()
 {
-        charmain.x = GetScreenToWorld2D(GetMousePosition(), world.cam).x;
+        charmain.x = GetScreenToWorld2D(GetMousePosition(), cam).x;
         charmain.y = (int)floor(GetScreenToWorld2D((Vector2){
-                screen_width, screen_height/4}, world.cam).y);
+                screen_width, screen_height/4}, cam).y);
         hitbox_character = (Vector2) {0, 0};
 
 	tmp_collide = false;
@@ -127,14 +122,14 @@ void world_transition()
 	PlaySound(current_res->falling_sound);
 	current_worldstate = W_PLAY;
 	current_scene = S_PLAY;
-	world.cam.target = (Vector2){ 0.0f, screen_height/4 };
+	cam.target = (Vector2){ 0.0f, screen_height/4 };
 }
 
 void world_play()
 {
-	charmain.x = GetScreenToWorld2D(GetMousePosition(), world.cam).x;
+	charmain.x = GetScreenToWorld2D(GetMousePosition(), cam).x;
 	charmain.y = (int)floor(GetScreenToWorld2D((Vector2){
-		screen_width, screen_height/4}, world.cam).y);
+		screen_width, screen_height/4}, cam).y);
 	hitbox_character = (Vector2) {charmain.x, charmain.y};
 
         play_sound();
@@ -150,10 +145,10 @@ void world_play()
 		PlaySound(current_res->death_sound);
 		if (atoi(personal_best) < (int)hitbox_character.y/100) {
 			sprintf(personal_best, "%d", (int)hitbox_character.y/100);
-			SaveFileText("personal_record", personal_best);
+			SaveFileText("save/personal_record", personal_best);
 		}
 	}
-	world.cam.target = (Vector2){ 0, speed+world.cam.target.y };
+	cam.target = (Vector2){ 0, speed+cam.target.y };
 
 	if (hitbox_character.y > starting_height && speed <= terminal_velocity) {
 		speed+=acceleration;
@@ -164,21 +159,21 @@ void world_starting()
 {
 	float i;
 
-        charmain.x = GetScreenToWorld2D(GetMousePosition(), world.cam).x;
+        charmain.x = GetScreenToWorld2D(GetMousePosition(), cam).x;
 
         charmain.y = (int)floor(GetScreenToWorld2D((Vector2){
-                screen_width, screen_height/4}, world.cam).y);
+                screen_width, screen_height/4}, cam).y);
 
         hitbox_character = (Vector2) {charmain.x, charmain.y};
 
 	speed = 10;
 
         unit_max =      GetScreenToWorld2D(
-                        (Vector2){screen_width, screen_height}, world.cam);
+                        (Vector2){screen_width, screen_height}, cam);
         unit_min =      GetScreenToWorld2D(
-                        (Vector2){0, 0}, world.cam);
+                        (Vector2){0, 0}, cam);
 
-	world.cam.target = (Vector2){ 0, speed+world.cam.target.y };
+	cam.target = (Vector2){ 0, speed+cam.target.y };
 
 	draw_character_fall(charmain.x, charmain.y);
 
@@ -223,9 +218,9 @@ void recursive_draw()
 	int tmp = 1;
 
         unit_max =      GetScreenToWorld2D(
-                        (Vector2){screen_width, screen_height}, world.cam);
+                        (Vector2){screen_width, screen_height}, cam);
         unit_min =      GetScreenToWorld2D(
-                        (Vector2){0, 0}, world.cam);
+                        (Vector2){0, 0}, cam);
 
         hitbox_tunnel_left = (Rectangle){
                         -tunnel_spacing-(current_res->tex.width*tunnel_scale),
@@ -292,9 +287,9 @@ void recursive_draw_env()
         float i;
 
         unit_max =      GetScreenToWorld2D(
-                        (Vector2){screen_width, screen_height}, world.cam);
+                        (Vector2){screen_width, screen_height}, cam);
         unit_min =      GetScreenToWorld2D(
-                        (Vector2){0, 0}, world.cam);
+                        (Vector2){0, 0}, cam);
 	float ultimate_max;
 	if (unit_min.y <= 0) {
 	        if ((screen_width) >= screen_height/2) {
