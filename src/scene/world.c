@@ -251,10 +251,10 @@ void recursive_draw()
 				tunnel_spacing, charmain.y-(real_tunnel_height/1.25), 
 				current_res->tunnel_inner_death);
 		}
-	        for (j  = tunnel_scale + real_tunnel_width;
+		for (j  = tunnel_scale + real_tunnel_width;
         	j <= unit_max.x;
         	j += real_tunnel_width) {
-        	        draw_tunnel_unit(j + tunnel_spacing, i, current_res->outer_world_tex);
+			draw_tunnel_unit(j + tunnel_spacing, i, current_res->outer_world_tex);
                 }
         }
 
